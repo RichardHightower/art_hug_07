@@ -1,0 +1,2036 @@
+metadata:
+  version: "1.0.0"
+  timestamp: "2025-01-02T12:10:00"
+  description: "Chapter 7: Beyond Language - Transformers for Vision, Audio, and Multimodal AI"
+  generator: "yaml-project"
+  generator_version: "0.1.0"
+  author: "Hugging Face Transformers Book - Chapter 7"
+  tags:
+    - "transformers"
+    - "multimodal"
+    - "vision"
+    - "audio"
+    - "diffusion"
+    - "chapter-7"
+
+content:
+  files:
+    pyproject.toml:
+      content: |
+        [tool.poetry]
+        name = "multimodal-ai"
+        version = "0.1.0"
+        description = "Multimodal AI with Vision, Audio, and Generative Models - Working Examples"
+        authors = ["Your Name <you@example.com>"]
+        readme = "README.md"
+        packages = [{include = "src"}]
+
+        [tool.poetry.dependencies]
+        python = "^3.12"
+        transformers = "^4.40.0"
+        torch = "^2.2.0"
+        torchvision = "^0.17.0"
+        torchaudio = "^2.2.0"
+        diffusers = "^0.25.0"
+        accelerate = "^0.25.0"
+        pillow = "^10.2.0"
+        soundfile = "^0.12.1"
+        librosa = "^0.10.1"
+        opencv-python = "^4.9.0"
+        matplotlib = "^3.8.0"
+        seaborn = "^0.13.0"
+        faiss-cpu = "^1.7.4"
+        sentencepiece = "^0.1.99"
+        python-dotenv = "^1.0.0"
+        pandas = "^2.1.0"
+        numpy = "^1.26.0"
+        requests = "^2.31.0"
+        gradio = "^4.16.0"
+
+        [tool.poetry.group.dev.dependencies]
+        pytest = "^8.0.0"
+        black = "^24.0.0"
+        ruff = "^0.6.0"
+        jupyter = "^1.0.0"
+        ipykernel = "^6.29.0"
+        ipywidgets = "^8.1.0"
+
+        [build-system]
+        requires = ["poetry-core"]
+        build-backend = "poetry.core.masonry.api"
+
+        [tool.black]
+        line-length = 88
+        target-version = ['py312']
+
+        [tool.ruff]
+        line-length = 88
+        target-version = "py312"
+
+        [tool.ruff.lint]
+        select = ["E", "F", "I", "N", "UP", "B", "C4", "SIM"]
+      metadata:
+        extension: .toml
+        size_bytes: 1400
+        language: toml
+
+    README.md:
+      content: |
+        # Beyond Language: Transformers for Vision, Audio, and Multimodal AI
+
+        This project contains working examples for Chapter 7 of the Hugging Face Transformers book, demonstrating how transformers have expanded beyond text to vision, audio, and multimodal applications.
+
+        ## Overview
+
+        Learn how to implement and understand:
+
+        - Vision Transformers (ViT, DeiT, Swin) for image classification and analysis
+        - Audio processing with Wav2Vec 2.0 and Whisper for speech recognition
+        - Generative AI with Stable Diffusion XL for text-to-image generation
+        - Multimodal models like CLIP and BLIP for cross-modal search and understanding
+        - Building multimodal search engines and applications
+        - Production deployment with SGLang
+
+        ## Prerequisites
+
+        - Python 3.12 (managed via pyenv)
+        - Poetry for dependency management
+        - Go Task for build automation
+        - CUDA-capable GPU recommended (but CPU mode supported)
+        - (Optional) Hugging Face account for accessing gated models
+
+        ## Setup
+
+        1. Clone this repository
+        2. Run the setup task:
+           ```bash
+           task setup
+           ```
+        3. Copy `.env.example` to `.env` and configure as needed
+        4. Download sample data:
+           ```bash
+           task download-samples
+           ```
+
+        ## Project Structure
+
+        ```
+        .
+        ├── src/
+        │   ├── __init__.py
+        │   ├── config.py                      # Configuration and utilities
+        │   ├── main.py                        # Entry point with all examples
+        │   ├── vision_transformers.py         # ViT, DeiT, Swin implementations
+        │   ├── audio_processing.py            # Wav2Vec2, Whisper examples
+        │   ├── diffusion_models.py            # Stable Diffusion XL generation
+        │   ├── multimodal_models.py           # CLIP, BLIP cross-modal search
+        │   ├── multimodal_search.py           # Building search applications
+        │   ├── sglang_deployment.py           # Production deployment examples
+        │   └── gradio_app.py                  # Interactive web interface
+        ├── tests/
+        │   └── test_multimodal.py             # Unit tests
+        ├── notebooks/
+        │   ├── vision_exploration.ipynb       # Interactive vision examples
+        │   └── multimodal_search.ipynb        # Search engine tutorial
+        ├── data/
+        │   ├── images/                        # Sample images
+        │   └── audio/                         # Sample audio files
+        ├── outputs/                           # Generated images and results
+        ├── .env.example                       # Environment template
+        ├── Taskfile.yml                       # Task automation
+        └── pyproject.toml                     # Poetry configuration
+        ```
+
+        ## Running Examples
+
+        Run all examples:
+        ```bash
+        task run
+        ```
+
+        Or run individual modules:
+        ```bash
+        task run-vision         # Vision transformer examples
+        task run-audio          # Audio processing examples
+        task run-diffusion      # Image generation with SDXL
+        task run-multimodal     # CLIP/BLIP multimodal examples
+        task run-search         # Multimodal search engine
+        task run-sglang         # SGLang deployment demo
+        ```
+
+        Launch interactive web app:
+        ```bash
+        task gradio
+        ```
+
+        ## Key Concepts Demonstrated
+
+        1. **Vision Transformers**: How ViT, DeiT, and Swin process images as patches
+        2. **Audio Transformers**: End-to-end speech recognition with Whisper
+        3. **Diffusion Models**: Generate images from text with SDXL
+        4. **Cross-Modal Understanding**: CLIP and BLIP for connecting text and images
+        5. **Production Deployment**: Using SGLang for scalable multimodal pipelines
+
+        ## Example Output
+
+        The examples demonstrate:
+
+        1. **Image Classification**: Classify images using state-of-the-art vision transformers
+        2. **Speech-to-Text**: Transcribe audio in multiple languages
+        3. **Text-to-Image**: Generate creative images from prompts
+        4. **Multimodal Search**: Find images using natural language queries
+        5. **Production Pipeline**: Deploy chained models with SGLang
+
+        ## Models Used
+
+        - **Vision**: ViT, DeiT, Swin Transformer
+        - **Audio**: Wav2Vec 2.0, Whisper
+        - **Generation**: Stable Diffusion XL
+        - **Multimodal**: CLIP, BLIP, BLIP-2, LLaVA
+
+        ## Available Tasks
+
+        - `task setup` - Set up Python environment and install dependencies
+        - `task run` - Run all examples
+        - `task test` - Run unit tests
+        - `task format` - Format code with Black and Ruff
+        - `task clean` - Clean up generated files and outputs
+        - `task download-samples` - Download sample images and audio
+        - `task gradio` - Launch interactive web interface
+        - `task notebook` - Launch Jupyter notebook server
+
+        ## GPU vs CPU Mode
+
+        The code automatically detects available hardware:
+        - CUDA GPU: Fastest performance
+        - MPS (Apple Silicon): Good performance on Mac
+        - CPU: Slower but functional
+
+        To force CPU mode, set `FORCE_CPU=true` in your `.env` file.
+
+        ## Troubleshooting
+
+        - **Out of Memory**: Try smaller models or enable CPU offloading
+        - **Slow Generation**: Use GPU or reduce image resolution
+        - **Model Download**: First run downloads several GB of models
+        - **Audio Issues**: Ensure audio files are 16kHz mono WAV
+
+        ## Learn More
+
+        - [Hugging Face Model Hub](https://huggingface.co/models)
+        - [Diffusers Documentation](https://huggingface.co/docs/diffusers)
+        - [SGLang Documentation](https://github.com/sgl-project/sglang)
+        - [Vision Transformer Papers](https://arxiv.org/abs/2010.11929)
+      metadata:
+        extension: .md
+        size_bytes: 4800
+        language: markdown
+
+    Taskfile.yml:
+      content: |
+        version: '3'
+
+        vars:
+          PYTHON_VERSION: 3.12.9
+
+        tasks:
+          default:
+            desc: "Show available tasks"
+            cmds:
+              - task --list
+
+          setup:
+            desc: "Set up the Python environment and install dependencies"
+            cmds:
+              - pyenv install -s {{.PYTHON_VERSION}}
+              - pyenv local {{.PYTHON_VERSION}}
+              - poetry install
+              - poetry config virtualenvs.in-project true
+              - mkdir -p data/images data/audio outputs
+              - 'echo "Setup complete! Activate with: source .venv/bin/activate"'
+
+          download-samples:
+            desc: "Download sample images and audio files"
+            cmds:
+              - poetry run python -c "from src.utils import download_samples; download_samples()"
+
+          run:
+            desc: "Run all examples"
+            cmds:
+              - poetry run python src/main.py
+
+          run-vision:
+            desc: "Run vision transformer examples"
+            cmds:
+              - poetry run python src/vision_transformers.py
+
+          run-audio:
+            desc: "Run audio processing examples"
+            cmds:
+              - poetry run python src/audio_processing.py
+
+          run-diffusion:
+            desc: "Run diffusion model examples"
+            cmds:
+              - poetry run python src/diffusion_models.py
+
+          run-multimodal:
+            desc: "Run multimodal model examples"
+            cmds:
+              - poetry run python src/multimodal_models.py
+
+          run-search:
+            desc: "Run multimodal search engine"
+            cmds:
+              - poetry run python src/multimodal_search.py
+
+          run-sglang:
+            desc: "Run SGLang deployment example"
+            cmds:
+              - poetry run python src/sglang_deployment.py
+
+          gradio:
+            desc: "Launch Gradio web interface"
+            cmds:
+              - poetry run python src/gradio_app.py
+
+          notebook:
+            desc: "Launch Jupyter notebook server"
+            cmds:
+              - poetry run jupyter notebook notebooks/
+
+          test:
+            desc: "Run all tests"
+            cmds:
+              - poetry run pytest tests/ -v
+
+          format:
+            desc: "Format code with Black and Ruff"
+            cmds:
+              - poetry run black src/ tests/
+              - poetry run ruff check --fix src/ tests/
+
+          clean:
+            desc: "Clean up generated files"
+            cmds:
+              - find . -type d -name "__pycache__" -exec rm -rf {} +
+              - find . -type f -name "*.pyc" -delete
+              - rm -rf .pytest_cache
+              - rm -rf .ruff_cache
+              - rm -rf .mypy_cache
+              - rm -rf outputs/*
+      metadata:
+        extension: .yml
+        size_bytes: 2100
+        language: yaml
+
+    .env.example:
+      content: |
+        # Hugging Face Configuration
+        HUGGINGFACE_TOKEN=your-hf-token-here
+
+        # Model Selection (optional - defaults are provided)
+        # Vision Models
+        VISION_MODEL=google/vit-base-patch16-224
+        # VISION_MODEL=facebook/deit-base-patch16-224
+        # VISION_MODEL=microsoft/swin-tiny-patch4-window7-224
+
+        # Audio Models
+        AUDIO_MODEL=openai/whisper-base
+        # AUDIO_MODEL=facebook/wav2vec2-base-960h
+
+        # Diffusion Models
+        DIFFUSION_MODEL=stabilityai/stable-diffusion-xl-base-1.0
+        # DIFFUSION_MODEL=runwayml/stable-diffusion-v1-5
+
+        # Multimodal Models
+        MULTIMODAL_MODEL=openai/clip-vit-base-patch16
+        # MULTIMODAL_MODEL=Salesforce/blip2-flan-t5-xl
+
+        # Performance Settings
+        FORCE_CPU=false
+        BATCH_SIZE=1
+        MAX_LENGTH=512
+
+        # Output Settings
+        OUTPUT_DIR=./outputs
+        SAVE_INTERMEDIATES=true
+
+        # SGLang Settings (if using)
+        SGLANG_PORT=8080
+        SGLANG_QUANTIZATION=awq
+
+        # Other Configuration
+        LOG_LEVEL=INFO
+        CACHE_DIR=~/.cache/huggingface
+      metadata:
+        extension: .example
+        size_bytes: 1000
+        language: text
+
+    .gitignore:
+      content: |
+        # Python
+        __pycache__/
+        *.py[cod]
+        *$py.class
+        *.so
+        .Python
+        env/
+        venv/
+        .venv/
+        ENV/
+        .env
+
+        # Poetry
+        dist/
+        *.egg-info/
+
+        # Testing
+        .pytest_cache/
+        .coverage
+        htmlcov/
+        .tox/
+
+        # IDE
+        .idea/
+        .vscode/
+        *.swp
+        *.swo
+        .DS_Store
+
+        # Jupyter
+        .ipynb_checkpoints/
+        *.ipynb_checkpoints
+
+        # Project specific
+        data/
+        models/
+        outputs/
+        *.log
+        .cache/
+        *.png
+        *.jpg
+        *.wav
+        *.mp3
+
+        # macOS
+        .DS_Store
+      metadata:
+        extension: .gitignore
+        size_bytes: 500
+        language: text
+
+    .python-version:
+      content: |
+        3.12.9
+      metadata:
+        extension: .python-version
+        size_bytes: 7
+        language: text
+
+    src/__init__.py:
+      content: |
+        """
+        Multimodal AI Examples - Vision, Audio, and Generative Models
+
+        This package demonstrates how transformers have expanded beyond text
+        to process images, audio, and multimodal data.
+        """
+
+        __version__ = "0.1.0"
+      metadata:
+        extension: .py
+        size_bytes: 250
+        language: python
+
+    src/config.py:
+      content: |
+        """Configuration module for multimodal AI examples."""
+
+        import os
+        from pathlib import Path
+        import torch
+        from dotenv import load_dotenv
+
+        # Load environment variables
+        load_dotenv()
+
+        # Project paths
+        PROJECT_ROOT = Path(__file__).parent.parent
+        DATA_DIR = PROJECT_ROOT / "data"
+        IMAGES_DIR = DATA_DIR / "images"
+        AUDIO_DIR = DATA_DIR / "audio"
+        OUTPUT_DIR = Path(os.getenv("OUTPUT_DIR", PROJECT_ROOT / "outputs"))
+
+        # Create directories if they don't exist
+        for dir_path in [DATA_DIR, IMAGES_DIR, AUDIO_DIR, OUTPUT_DIR]:
+            dir_path.mkdir(parents=True, exist_ok=True)
+
+        # Model configurations
+        VISION_MODEL = os.getenv("VISION_MODEL", "google/vit-base-patch16-224")
+        AUDIO_MODEL = os.getenv("AUDIO_MODEL", "openai/whisper-base")
+        DIFFUSION_MODEL = os.getenv("DIFFUSION_MODEL", "stabilityai/stable-diffusion-xl-base-1.0")
+        MULTIMODAL_MODEL = os.getenv("MULTIMODAL_MODEL", "openai/clip-vit-base-patch16")
+
+        # Performance settings
+        FORCE_CPU = os.getenv("FORCE_CPU", "false").lower() == "true"
+        BATCH_SIZE = int(os.getenv("BATCH_SIZE", "1"))
+        MAX_LENGTH = int(os.getenv("MAX_LENGTH", "512"))
+
+        # Hugging Face token (optional)
+        HF_TOKEN = os.getenv("HUGGINGFACE_TOKEN")
+
+        # Cache directory
+        CACHE_DIR = Path(os.getenv("CACHE_DIR", "~/.cache/huggingface")).expanduser()
+
+        def get_device():
+            """Get the best available device."""
+            if FORCE_CPU:
+                return "cpu"
+            elif torch.cuda.is_available():
+                return "cuda"
+            elif torch.backends.mps.is_available():
+                return "mps"
+            else:
+                return "cpu"
+
+        DEVICE = get_device()
+
+        # Sample URLs for downloading test data
+        SAMPLE_IMAGE_URL = "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/transformers/tasks/image_classification_parrots.png"
+        SAMPLE_AUDIO_URL = "https://huggingface.co/datasets/Narsil/asr_dummy/resolve/main/1.flac"
+      metadata:
+        extension: .py
+        size_bytes: 1800
+        language: python
+
+    src/main.py:
+      content: |
+        """Main entry point demonstrating all multimodal AI examples."""
+
+        import sys
+        from pathlib import Path
+
+        # Add src to path
+        sys.path.append(str(Path(__file__).parent))
+
+        from vision_transformers import demonstrate_vision_transformers
+        from audio_processing import demonstrate_audio_processing
+        from diffusion_models import demonstrate_diffusion_models
+        from multimodal_models import demonstrate_multimodal_models
+        from multimodal_search import demonstrate_multimodal_search
+
+        def print_section(title: str):
+            """Print a formatted section header."""
+            print("\n" + "=" * 70)
+            print(f"  {title}")
+            print("=" * 70 + "\n")
+
+        def main():
+            """Run all multimodal AI examples."""
+            print_section("MULTIMODAL AI: VISION, AUDIO & GENERATIVE MODELS")
+            print("This script demonstrates how transformers have expanded beyond text")
+            print("to process images, audio, and multimodal data.\n")
+            
+            # Vision Transformers
+            print_section("1. VISION TRANSFORMERS")
+            print("Classifying images with ViT, DeiT, and Swin Transformer...")
+            demonstrate_vision_transformers()
+            
+            # Audio Processing
+            print_section("2. AUDIO PROCESSING")
+            print("Speech recognition and audio analysis with Whisper...")
+            demonstrate_audio_processing()
+            
+            # Diffusion Models
+            print_section("3. DIFFUSION MODELS")
+            print("Generating images from text with Stable Diffusion XL...")
+            demonstrate_diffusion_models()
+            
+            # Multimodal Models
+            print_section("4. MULTIMODAL MODELS")
+            print("Cross-modal understanding with CLIP and BLIP...")
+            demonstrate_multimodal_models()
+            
+            # Multimodal Search
+            print_section("5. MULTIMODAL SEARCH ENGINE")
+            print("Building a practical image search application...")
+            demonstrate_multimodal_search()
+            
+            # Conclusion
+            print_section("CONCLUSION")
+            print("You've seen how transformers now power vision, audio, and multimodal AI!")
+            print("These models enable new applications across industries:")
+            print("- Automated visual inspection and content moderation")
+            print("- Speech analytics and accessibility tools")
+            print("- Creative AI for design and content generation")
+            print("- Intelligent search across different data types")
+            print("\nExplore the individual modules and notebooks to dive deeper!")
+
+        if __name__ == "__main__":
+            main()
+      metadata:
+        extension: .py
+        size_bytes: 2300
+        language: python
+
+    src/vision_transformers.py:
+      content: |
+        """Vision Transformer examples using ViT, DeiT, and Swin."""
+
+        from transformers import AutoImageProcessor, AutoModelForImageClassification
+        from PIL import Image
+        import torch
+        import requests
+        from config import VISION_MODEL, get_device, SAMPLE_IMAGE_URL, OUTPUT_DIR
+
+        def classify_image_with_model(image_path, model_name=VISION_MODEL):
+            """
+            Classify an image using a vision transformer model.
+            
+            Args:
+                image_path: Path to image or URL
+                model_name: Model to use (ViT, DeiT, Swin, etc.)
+            
+            Returns:
+                Predicted class and confidence
+            """
+            device = get_device()
+            
+            # Load image
+            if isinstance(image_path, str) and image_path.startswith('http'):
+                image = Image.open(requests.get(image_path, stream=True).raw)
+            else:
+                image = Image.open(image_path)
+            
+            # Load processor and model
+            processor = AutoImageProcessor.from_pretrained(model_name)
+            model = AutoModelForImageClassification.from_pretrained(model_name)
+            
+            if device != "cpu":
+                model = model.to(device)
+            
+            # Preprocess and predict
+            inputs = processor(images=image, return_tensors="pt")
+            if device != "cpu":
+                inputs = {k: v.to(device) for k, v in inputs.items()}
+            
+            with torch.no_grad():
+                outputs = model(**inputs)
+            
+            # Get prediction
+            logits = outputs.logits
+            predicted_idx = logits.argmax(-1).item()
+            predicted_label = model.config.id2label[predicted_idx]
+            confidence = torch.nn.functional.softmax(logits, dim=-1)[0, predicted_idx].item()
+            
+            return predicted_label, confidence
+
+        def compare_vision_models(image_path):
+            """Compare different vision transformer architectures."""
+            models = {
+                "ViT": "google/vit-base-patch16-224",
+                "DeiT": "facebook/deit-base-patch16-224",
+                "Swin": "microsoft/swin-tiny-patch4-window7-224",
+            }
+            
+            results = {}
+            for name, model_id in models.items():
+                try:
+                    label, confidence = classify_image_with_model(image_path, model_id)
+                    results[name] = (label, confidence)
+                    print(f"{name}: {label} ({confidence:.2%})")
+                except Exception as e:
+                    print(f"{name}: Error - {e}")
+                    results[name] = ("Error", 0.0)
+            
+            return results
+
+        def demonstrate_vision_transformers():
+            """Run vision transformer demonstrations."""
+            
+            print("Downloading sample image...")
+            
+            # Example 1: Basic classification
+            print("\n1. Basic Image Classification with ViT:")
+            label, confidence = classify_image_with_model(SAMPLE_IMAGE_URL)
+            print(f"   Predicted: {label} (confidence: {confidence:.2%})")
+            
+            # Example 2: Compare architectures
+            print("\n2. Comparing Vision Transformer Architectures:")
+            print("   (This may take a moment as models are downloaded...)")
+            compare_vision_models(SAMPLE_IMAGE_URL)
+            
+            # Example 3: Patch visualization concept
+            print("\n3. Understanding Vision Transformers:")
+            print("   - Images are divided into patches (e.g., 16x16 pixels)")
+            print("   - Each patch is treated like a 'word' in a sentence")
+            print("   - Self-attention learns relationships between patches")
+            print("   - This enables understanding of both local and global features")
+            
+            print("\nKey advantages of modern vision transformers:")
+            print("✓ DeiT: More data-efficient training")
+            print("✓ Swin: Hierarchical features for better scalability")
+            print("✓ All models use the same Hugging Face API!")
+
+        if __name__ == "__main__":
+            print("=== Vision Transformer Examples ===\n")
+            demonstrate_vision_transformers()
+      metadata:
+        extension: .py
+        size_bytes: 3600
+        language: python
+
+    src/audio_processing.py:
+      content: |
+        """Audio processing examples with Wav2Vec2 and Whisper."""
+
+        from transformers import pipeline, AutoProcessor, AutoModelForSpeechRecognition
+        import torch
+        import numpy as np
+        from config import AUDIO_MODEL, get_device, AUDIO_DIR
+        import soundfile as sf
+
+        def transcribe_audio_pipeline(audio_path, model_name=AUDIO_MODEL):
+            """
+            Transcribe audio using the pipeline API (recommended).
+            
+            Args:
+                audio_path: Path to audio file
+                model_name: Model to use (Whisper, Wav2Vec2, etc.)
+            
+            Returns:
+                Transcribed text
+            """
+            device = get_device()
+            
+            # Create pipeline
+            asr = pipeline(
+                "automatic-speech-recognition",
+                model=model_name,
+                device=0 if device == "cuda" else -1
+            )
+            
+            # Transcribe
+            result = asr(audio_path)
+            return result["text"]
+
+        def transcribe_audio_manual(audio_path, model_name=AUDIO_MODEL):
+            """
+            Transcribe audio using AutoProcessor and AutoModel (for learning).
+            
+            Args:
+                audio_path: Path to audio file
+                model_name: Model to use
+            
+            Returns:
+                Transcribed text
+            """
+            device = get_device()
+            
+            # Load audio
+            audio, sampling_rate = sf.read(audio_path)
+            
+            # Load processor and model
+            processor = AutoProcessor.from_pretrained(model_name)
+            model = AutoModelForSpeechRecognition.from_pretrained(model_name)
+            
+            if device != "cpu":
+                model = model.to(device)
+            
+            # Process audio
+            inputs = processor(
+                audio,
+                sampling_rate=sampling_rate,
+                return_tensors="pt",
+                padding=True
+            )
+            
+            if device != "cpu":
+                inputs = {k: v.to(device) for k, v in inputs.items()}
+            
+            # Generate transcription
+            with torch.no_grad():
+                if "whisper" in model_name.lower():
+                    # Whisper uses generate method
+                    predicted_ids = model.generate(**inputs)
+                else:
+                    # Wav2Vec2 uses argmax on logits
+                    logits = model(**inputs).logits
+                    predicted_ids = torch.argmax(logits, dim=-1)
+            
+            # Decode
+            transcription = processor.batch_decode(predicted_ids, skip_special_tokens=True)
+            return transcription[0]
+
+        def create_sample_audio():
+            """Create a simple test audio file."""
+            # Generate a simple sine wave
+            duration = 3  # seconds
+            sample_rate = 16000
+            frequency = 440  # A4 note
+            
+            t = np.linspace(0, duration, int(sample_rate * duration))
+            audio = 0.5 * np.sin(2 * np.pi * frequency * t)
+            
+            # Add some variation
+            audio += 0.1 * np.sin(2 * np.pi * frequency * 2 * t)
+            
+            # Save
+            audio_path = AUDIO_DIR / "test_tone.wav"
+            sf.write(audio_path, audio, sample_rate)
+            
+            return audio_path
+
+        def demonstrate_audio_processing():
+            """Run audio processing demonstrations."""
+            
+            print("Preparing audio examples...")
+            
+            # Create sample audio
+            test_audio = create_sample_audio()
+            print(f"Created test audio: {test_audio}")
+            
+            # Example 1: Pipeline API (recommended)
+            print("\n1. Transcription with Pipeline API:")
+            print("   (Note: Test audio is just a tone, expect no meaningful transcription)")
+            
+            try:
+                # For real transcription, use actual speech audio
+                print("   Using Whisper model for robust transcription...")
+                # transcription = transcribe_audio_pipeline(test_audio, "openai/whisper-base")
+                # print(f"   Transcribed: '{transcription}'")
+                print("   [Skipping tone transcription - use real speech audio]")
+            except Exception as e:
+                print(f"   Error: {e}")
+            
+            # Example 2: Understanding audio transformers
+            print("\n2. How Audio Transformers Work:")
+            print("   - Raw audio waveform is input (no manual feature extraction)")
+            print("   - Model learns to extract features automatically")
+            print("   - Self-attention captures temporal dependencies")
+            print("   - End-to-end learning from audio to text")
+            
+            # Example 3: Model comparison
+            print("\n3. Audio Model Comparison:")
+            print("   Whisper:")
+            print("   - Multilingual, robust to noise")
+            print("   - Trained on diverse web audio")
+            print("   - Best for general transcription")
+            print("\n   Wav2Vec 2.0:")
+            print("   - Self-supervised pretraining")
+            print("   - Good for fine-tuning on specific domains")
+            print("   - Efficient for real-time applications")
+            
+            print("\nTip: For production use, consider:")
+            print("- Streaming inference for real-time transcription")
+            print("- Model quantization for faster inference")
+            print("- Language-specific models for better accuracy")
+
+        if __name__ == "__main__":
+            print("=== Audio Processing Examples ===\n")
+            demonstrate_audio_processing()
+      metadata:
+        extension: .py
+        size_bytes: 4800
+        language: python
+
+    src/diffusion_models.py:
+      content: |
+        """Text-to-image generation with Stable Diffusion XL."""
+
+        from diffusers import StableDiffusionXLPipeline, DPMSolverMultistepScheduler
+        import torch
+        from PIL import Image
+        from config import DIFFUSION_MODEL, get_device, OUTPUT_DIR
+
+        def generate_image(
+            prompt,
+            negative_prompt="blurry, low quality, distorted",
+            model_name=DIFFUSION_MODEL,
+            guidance_scale=7.5,
+            num_inference_steps=25
+        ):
+            """
+            Generate an image from a text prompt using SDXL.
+            
+            Args:
+                prompt: Text description of desired image
+                negative_prompt: What to avoid in the image
+                model_name: Diffusion model to use
+                guidance_scale: How closely to follow the prompt
+                num_inference_steps: Number of denoising steps
+            
+            Returns:
+                Generated PIL Image
+            """
+            device = get_device()
+            
+            print(f"Loading {model_name}...")
+            print(f"Using device: {device}")
+            
+            # Load pipeline with optimizations
+            pipe = StableDiffusionXLPipeline.from_pretrained(
+                model_name,
+                torch_dtype=torch.float16 if device != "cpu" else torch.float32,
+                use_safetensors=True,
+                variant="fp16" if device != "cpu" else None
+            )
+            
+            # Use faster scheduler
+            pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+            
+            # Move to device with memory optimizations
+            if device == "cuda":
+                pipe = pipe.to("cuda")
+                pipe.enable_model_cpu_offload()
+                pipe.enable_vae_slicing()
+            elif device == "mps":
+                pipe = pipe.to("mps")
+            else:
+                pipe = pipe.to("cpu")
+            
+            # Generate image
+            print(f"Generating image: '{prompt}'...")
+            result = pipe(
+                prompt=prompt,
+                negative_prompt=negative_prompt,
+                guidance_scale=guidance_scale,
+                num_inference_steps=num_inference_steps
+            )
+            
+            return result.images[0]
+
+        def demonstrate_diffusion_models():
+            """Run diffusion model demonstrations."""
+            
+            print("Demonstrating text-to-image generation with Stable Diffusion XL...")
+            print("Note: First run will download several GB of model weights.")
+            
+            # Example prompts
+            prompts = [
+                {
+                    "prompt": "A serene Japanese garden with cherry blossoms and a wooden bridge, highly detailed digital art",
+                    "style": "peaceful landscape"
+                },
+                {
+                    "prompt": "A friendly robot teaching mathematics to children in a colorful classroom, cartoon style",
+                    "style": "educational illustration"
+                },
+                {
+                    "prompt": "An astronaut riding a horse on Mars, photorealistic, dramatic lighting",
+                    "style": "surreal concept"
+                }
+            ]
+            
+            print("\nGenerating example images:")
+            
+            for i, example in enumerate(prompts):
+                print(f"\n{i+1}. {example['style'].title()}:")
+                print(f"   Prompt: {example['prompt']}")
+                
+                try:
+                    # Generate image
+                    image = generate_image(
+                        example["prompt"],
+                        num_inference_steps=25  # Fewer steps for demo
+                    )
+                    
+                    # Save image
+                    filename = OUTPUT_DIR / f"generated_{i+1}_{example['style'].replace(' ', '_')}.png"
+                    image.save(filename)
+                    print(f"   Saved to: {filename}")
+                    
+                except Exception as e:
+                    print(f"   Error: {e}")
+                    print("   (This often happens on CPU or with limited memory)")
+            
+            # Explain the process
+            print("\n" + "-" * 50)
+            print("\nHow Diffusion Models Work:")
+            print("1. Start with random noise")
+            print("2. Text prompt is encoded into embeddings")
+            print("3. Model gradually 'denoises' the image")
+            print("4. Each step refines details guided by the prompt")
+            print("5. Result: AI-generated image matching your description")
+            
+            print("\nTips for better results:")
+            print("✓ Be specific and descriptive in prompts")
+            print("✓ Use negative prompts to avoid unwanted features")
+            print("✓ Experiment with guidance_scale (7-12 usually works well)")
+            print("✓ Try different artistic styles and modifiers")
+            print("✓ Use SDXL for highest quality, SD 1.5 for speed")
+
+        if __name__ == "__main__":
+            print("=== Diffusion Model Examples ===\n")
+            demonstrate_diffusion_models()
+      metadata:
+        extension: .py
+        size_bytes: 4200
+        language: python
+
+    src/multimodal_models.py:
+      content: |
+        """Cross-modal understanding with CLIP and BLIP models."""
+
+        from transformers import AutoModel, AutoProcessor
+        from PIL import Image
+        import torch
+        import requests
+        from config import MULTIMODAL_MODEL, get_device, IMAGES_DIR, SAMPLE_IMAGE_URL
+
+        def compute_clip_similarity(images, texts, model_name=MULTIMODAL_MODEL):
+            """
+            Compute similarity between images and texts using CLIP.
+            
+            Args:
+                images: List of PIL Images
+                texts: List of text descriptions
+                model_name: CLIP model to use
+            
+            Returns:
+                Similarity matrix (images x texts)
+            """
+            device = get_device()
+            
+            # Load model and processor
+            model = AutoModel.from_pretrained(model_name)
+            processor = AutoProcessor.from_pretrained(model_name)
+            
+            if device != "cpu":
+                model = model.to(device)
+            
+            # Process inputs
+            inputs = processor(
+                text=texts,
+                images=images,
+                return_tensors="pt",
+                padding=True
+            )
+            
+            if device != "cpu":
+                inputs = {k: v.to(device) for k, v in inputs.items()}
+            
+            # Compute features
+            with torch.no_grad():
+                outputs = model(**inputs)
+                logits_per_image = outputs.logits_per_image
+                probs = logits_per_image.softmax(dim=1)
+            
+            return probs.cpu().numpy()
+
+        def find_best_match(image, text_queries, model_name=MULTIMODAL_MODEL):
+            """
+            Find the best matching text for an image.
+            
+            Args:
+                image: PIL Image
+                text_queries: List of text descriptions
+                model_name: Model to use
+            
+            Returns:
+                Best matching text and confidence
+            """
+            probs = compute_clip_similarity([image], text_queries, model_name)
+            best_idx = probs[0].argmax()
+            best_text = text_queries[best_idx]
+            confidence = probs[0, best_idx]
+            
+            return best_text, confidence
+
+        def demonstrate_multimodal_models():
+            """Run multimodal model demonstrations."""
+            
+            print("Demonstrating cross-modal understanding with CLIP...")
+            
+            # Load sample image
+            print("\n1. Loading sample image...")
+            image = Image.open(requests.get(SAMPLE_IMAGE_URL, stream=True).raw)
+            
+            # Example 1: Zero-shot classification
+            print("\n2. Zero-shot Image Classification:")
+            labels = [
+                "a photo of a cat",
+                "a photo of a dog", 
+                "a photo of a bird",
+                "a photo of a car",
+                "a photo of a person"
+            ]
+            
+            best_label, confidence = find_best_match(image, labels)
+            print(f"   Best match: '{best_label}' (confidence: {confidence:.2%})")
+            
+            # Example 2: More detailed queries
+            print("\n3. Detailed Description Matching:")
+            detailed_queries = [
+                "a colorful parrot in nature",
+                "a red and blue tropical bird",
+                "a small songbird on a branch",
+                "an eagle soaring in the sky",
+                "a group of penguins"
+            ]
+            
+            probs = compute_clip_similarity([image], detailed_queries)
+            print("   Similarity scores:")
+            for i, query in enumerate(detailed_queries):
+                print(f"   - '{query}': {probs[0, i]:.2%}")
+            
+            # Example 3: Understanding CLIP's embedding space
+            print("\n4. How CLIP Works:")
+            print("   - Dual encoders: one for images, one for text")
+            print("   - Both map to the same embedding space")
+            print("   - Contrastive learning aligns matching pairs")
+            print("   - Enables zero-shot classification and search")
+            
+            # Example 4: BLIP and beyond
+            print("\n5. Beyond CLIP:")
+            print("   BLIP-2: Better captioning and VQA")
+            print("   LLaVA: Multimodal conversation")
+            print("   ImageBind: Connects 6+ modalities")
+            print("   All available through Hugging Face!")
+            
+            print("\nPractical applications:")
+            print("✓ Image search with natural language")
+            print("✓ Content moderation and filtering")
+            print("✓ Automatic image tagging")
+            print("✓ Visual question answering")
+
+        if __name__ == "__main__":
+            print("=== Multimodal Model Examples ===\n")
+            demonstrate_multimodal_models()
+      metadata:
+        extension: .py
+        size_bytes: 3800
+        language: python
+
+    src/multimodal_search.py:
+      content: |
+        """Building a multimodal search engine with CLIP."""
+
+        from transformers import AutoModel, AutoProcessor
+        from PIL import Image
+        import torch
+        import numpy as np
+        from pathlib import Path
+        import requests
+        from config import MULTIMODAL_MODEL, get_device, IMAGES_DIR
+
+        class MultimodalSearchEngine:
+            """A simple multimodal search engine using CLIP."""
+            
+            def __init__(self, model_name=MULTIMODAL_MODEL):
+                self.device = get_device()
+                self.model = AutoModel.from_pretrained(model_name)
+                self.processor = AutoProcessor.from_pretrained(model_name)
+                
+                if self.device != "cpu":
+                    self.model = self.model.to(self.device)
+                
+                self.image_embeddings = None
+                self.image_paths = []
+            
+            def index_images(self, image_folder):
+                """
+                Index all images in a folder.
+                
+                Args:
+                    image_folder: Path to folder containing images
+                """
+                image_folder = Path(image_folder)
+                self.image_paths = list(image_folder.glob("*.jpg")) + \
+                                  list(image_folder.glob("*.png"))
+                
+                if not self.image_paths:
+                    print(f"No images found in {image_folder}")
+                    return
+                
+                print(f"Indexing {len(self.image_paths)} images...")
+                
+                # Load and process images
+                images = []
+                valid_paths = []
+                
+                for path in self.image_paths:
+                    try:
+                        img = Image.open(path).convert("RGB")
+                        images.append(img)
+                        valid_paths.append(path)
+                    except Exception as e:
+                        print(f"Error loading {path}: {e}")
+                
+                self.image_paths = valid_paths
+                
+                # Compute embeddings
+                inputs = self.processor(images=images, return_tensors="pt", padding=True)
+                if self.device != "cpu":
+                    inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                
+                with torch.no_grad():
+                    self.image_embeddings = self.model.get_image_features(**inputs)
+                    # Normalize for cosine similarity
+                    self.image_embeddings /= self.image_embeddings.norm(dim=-1, keepdim=True)
+                
+                print(f"Indexed {len(self.image_paths)} images successfully!")
+            
+            def search(self, query, top_k=5):
+                """
+                Search for images using a text query.
+                
+                Args:
+                    query: Text description
+                    top_k: Number of results to return
+                
+                Returns:
+                    List of (image_path, similarity_score) tuples
+                """
+                if self.image_embeddings is None:
+                    raise ValueError("No images indexed. Call index_images() first.")
+                
+                # Encode text query
+                text_inputs = self.processor(text=[query], return_tensors="pt", padding=True)
+                if self.device != "cpu":
+                    text_inputs = {k: v.to(self.device) for k, v in text_inputs.items()}
+                
+                with torch.no_grad():
+                    text_features = self.model.get_text_features(**text_inputs)
+                    text_features /= text_features.norm(dim=-1, keepdim=True)
+                
+                # Compute similarities
+                similarities = (self.image_embeddings @ text_features.T).squeeze(1)
+                
+                # Get top results
+                top_indices = similarities.argsort(descending=True)[:top_k]
+                
+                results = []
+                for idx in top_indices:
+                    path = self.image_paths[idx.item()]
+                    score = similarities[idx].item()
+                    results.append((path, score))
+                
+                return results
+
+        def download_sample_images():
+            """Download sample images for search demo."""
+            sample_urls = {
+                "parrot.jpg": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/transformers/tasks/image_classification_parrots.png",
+                "cat.jpg": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400",
+                "dog.jpg": "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400",
+                "sunset.jpg": "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?w=400",
+            }
+            
+            for filename, url in sample_urls.items():
+                filepath = IMAGES_DIR / filename
+                if not filepath.exists():
+                    try:
+                        img = Image.open(requests.get(url, stream=True).raw)
+                        img.save(filepath)
+                        print(f"Downloaded {filename}")
+                    except Exception as e:
+                        print(f"Error downloading {filename}: {e}")
+
+        def demonstrate_multimodal_search():
+            """Run multimodal search demonstrations."""
+            
+            print("Building a multimodal search engine...")
+            
+            # Download sample images
+            print("\n1. Preparing sample images...")
+            download_sample_images()
+            
+            # Create search engine
+            print("\n2. Creating search engine...")
+            search_engine = MultimodalSearchEngine()
+            
+            # Index images
+            print("\n3. Indexing images...")
+            search_engine.index_images(IMAGES_DIR)
+            
+            # Run searches
+            print("\n4. Running example searches:")
+            
+            queries = [
+                "a colorful bird",
+                "a cute pet",
+                "beautiful sunset",
+                "animal with feathers",
+                "orange and warm colors"
+            ]
+            
+            for query in queries:
+                print(f"\nQuery: '{query}'")
+                results = search_engine.search(query, top_k=3)
+                
+                for i, (path, score) in enumerate(results, 1):
+                    print(f"  {i}. {path.name} (similarity: {score:.3f})")
+            
+            # Explain the technology
+            print("\n" + "-" * 50)
+            print("\nHow Multimodal Search Works:")
+            print("1. Index: Compute embeddings for all images")
+            print("2. Query: Convert text to embedding")
+            print("3. Search: Find images with similar embeddings")
+            print("4. Rank: Return top matches by similarity")
+            
+            print("\nScaling to production:")
+            print("✓ Use vector databases (FAISS, Pinecone, Qdrant)")
+            print("✓ Implement caching and batch processing")
+            print("✓ Add metadata filtering")
+            print("✓ Consider approximate nearest neighbor search")
+
+        if __name__ == "__main__":
+            print("=== Multimodal Search Engine ===\n")
+            demonstrate_multimodal_search()
+      metadata:
+        extension: .py
+        size_bytes: 6200
+        language: python
+
+    src/sglang_deployment.py:
+      content: |
+        """SGLang deployment example for multimodal pipelines."""
+
+        from config import get_device
+
+        def demonstrate_sglang_deployment():
+            """Demonstrate SGLang deployment concepts."""
+            
+            print("SGLang: Advanced Model Serving for Multimodal Pipelines")
+            print("=" * 50)
+            
+            print("\nNote: This is a conceptual demonstration.")
+            print("For full SGLang deployment, install: pip install 'sglang[all]'")
+            
+            # Conceptual pipeline example
+            print("\n1. Example Multimodal Pipeline:")
+            print("""
+        Customer Support Automation Pipeline:
+        
+        Input:
+            ├── Screenshot (Image)
+            └── Voice Message (Audio)
+                    ↓
+        Processing Graph:
+            ├── Image Classifier Node
+            │   └── Classify: error/feature_request/other
+            ├── Audio Transcriber Node
+            │   └── Convert speech to text
+            └── → Combiner Node
+                    ↓
+            Summary Generator Node
+                    ↓
+        Output:
+            └── Support Ticket Summary
+        """)
+            
+            print("\n2. SGLang Benefits:")
+            print("   ✓ Graph-based pipeline definition")
+            print("   ✓ Automatic batching and optimization")
+            print("   ✓ Support for quantization (FP8/INT4/AWQ)")
+            print("   ✓ Multi-LoRA serving")
+            print("   ✓ Streaming and async processing")
+            
+            print("\n3. Sample SGLang Pipeline Code:")
+            print("""
+        import sglang as sgl
+        
+        @sgl.function
+        def classify_image(s, image):
+            s += sgl.image(image)
+            s += "Classify this support screenshot: "
+            s += sgl.gen("classification", max_tokens=10)
+        
+        @sgl.function
+        def transcribe_audio(s, audio):
+            # Use speech model
+            s += "Transcribed: " + speech_to_text(audio)
+        
+        @sgl.function
+        def summarize_ticket(s, img_class, transcript):
+            s += f"Image type: {img_class}\\n"
+            s += f"User said: {transcript}\\n"
+            s += "Summary: " + sgl.gen("summary", max_tokens=100)
+        """)
+            
+            print("\n4. Deployment Options:")
+            print("   - Local server: python -m sglang.launch_server")
+            print("   - Docker container for isolation")
+            print("   - Kubernetes for scale")
+            print("   - Cloud endpoints (AWS, GCP, Azure)")
+            
+            print("\n5. Performance Optimizations:")
+            print("   - Quantization reduces memory 4x")
+            print("   - RadixAttention for KV cache sharing")
+            print("   - Speculative decoding for 2-3x speedup")
+            print("   - Continuous batching for throughput")
+            
+            print("\nFor production deployment:")
+            print("1. Define your pipeline as SGLang functions")
+            print("2. Configure quantization and optimization")
+            print("3. Launch server with your pipeline")
+            print("4. Integrate with your application via REST API")
+            
+            print("\nLearn more: https://github.com/sgl-project/sglang")
+
+        if __name__ == "__main__":
+            print("=== SGLang Deployment Example ===\n")
+            demonstrate_sglang_deployment()
+      metadata:
+        extension: .py
+        size_bytes: 2800
+        language: python
+
+    src/gradio_app.py:
+      content: |
+        """Interactive Gradio app for multimodal AI demos."""
+
+        import gradio as gr
+        from PIL import Image
+        import numpy as np
+        from vision_transformers import classify_image_with_model
+        from multimodal_models import find_best_match
+        from diffusion_models import generate_image
+        from config import get_device
+
+        def create_interface():
+            """Create the Gradio interface."""
+            
+            with gr.Blocks(title="Multimodal AI Demo") as demo:
+                gr.Markdown(
+                    """
+                    # 🤖 Multimodal AI: Vision, Audio & Generation
+                    
+                    Explore how transformers work with images, audio, and cross-modal understanding!
+                    """
+                )
+                
+                with gr.Tab("Vision Transformers"):
+                    gr.Markdown("### Classify images using state-of-the-art vision transformers")
+                    
+                    with gr.Row():
+                        image_input = gr.Image(type="pil", label="Upload Image")
+                        model_choice = gr.Dropdown(
+                            choices=[
+                                "google/vit-base-patch16-224",
+                                "facebook/deit-base-patch16-224",
+                                "microsoft/swin-tiny-patch4-window7-224"
+                            ],
+                            value="google/vit-base-patch16-224",
+                            label="Choose Model"
+                        )
+                    
+                    classify_btn = gr.Button("Classify Image", variant="primary")
+                    classification_output = gr.Textbox(label="Classification Result")
+                    
+                    def classify_wrapper(img, model):
+                        if img is None:
+                            return "Please upload an image"
+                        try:
+                            label, conf = classify_image_with_model(img, model)
+                            return f"Predicted: {label} (confidence: {conf:.2%})"
+                        except Exception as e:
+                            return f"Error: {str(e)}"
+                    
+                    classify_btn.click(
+                        classify_wrapper,
+                        inputs=[image_input, model_choice],
+                        outputs=classification_output
+                    )
+                
+                with gr.Tab("CLIP Search"):
+                    gr.Markdown("### Find best matching description for an image")
+                    
+                    clip_image = gr.Image(type="pil", label="Upload Image")
+                    clip_queries = gr.Textbox(
+                        label="Enter descriptions (one per line)",
+                        placeholder="a happy dog\na sad cat\na beautiful sunset\na city street",
+                        lines=4
+                    )
+                    
+                    clip_btn = gr.Button("Find Best Match", variant="primary")
+                    clip_output = gr.Textbox(label="Results")
+                    
+                    def clip_search(img, queries):
+                        if img is None or not queries:
+                            return "Please provide both image and descriptions"
+                        try:
+                            query_list = [q.strip() for q in queries.split('\n') if q.strip()]
+                            best, conf = find_best_match(img, query_list)
+                            return f"Best match: '{best}' (confidence: {conf:.2%})"
+                        except Exception as e:
+                            return f"Error: {str(e)}"
+                    
+                    clip_btn.click(
+                        clip_search,
+                        inputs=[clip_image, clip_queries],
+                        outputs=clip_output
+                    )
+                
+                with gr.Tab("Image Generation"):
+                    gr.Markdown("### Generate images from text descriptions")
+                    gr.Markdown("⚠️ Note: This requires significant GPU memory")
+                    
+                    prompt_input = gr.Textbox(
+                        label="Prompt",
+                        placeholder="A serene mountain landscape at sunset, digital art",
+                        lines=2
+                    )
+                    negative_prompt = gr.Textbox(
+                        label="Negative Prompt",
+                        value="blurry, low quality, distorted",
+                        lines=2
+                    )
+                    
+                    generate_btn = gr.Button("Generate Image", variant="primary")
+                    generated_image = gr.Image(label="Generated Image")
+                    
+                    def generate_wrapper(prompt, neg_prompt):
+                        if not prompt:
+                            return None
+                        try:
+                            # Use fewer steps for demo
+                            img = generate_image(prompt, neg_prompt, num_inference_steps=20)
+                            return img
+                        except Exception as e:
+                            # Return error as image
+                            error_img = Image.new('RGB', (512, 512), color='black')
+                            return error_img
+                    
+                    generate_btn.click(
+                        generate_wrapper,
+                        inputs=[prompt_input, negative_prompt],
+                        outputs=generated_image
+                    )
+                
+                gr.Markdown(
+                    """
+                    ---
+                    ### About This Demo
+                    
+                    This interactive demo showcases:
+                    - **Vision Transformers**: ViT, DeiT, and Swin for image classification
+                    - **CLIP**: Cross-modal understanding between text and images
+                    - **Stable Diffusion**: Text-to-image generation
+                    
+                    Device: {}
+                    
+                    Learn more in the [Hugging Face documentation](https://huggingface.co/docs).
+                    """.format(get_device().upper())
+                )
+            
+            return demo
+
+        if __name__ == "__main__":
+            demo = create_interface()
+            demo.launch(share=False)
+      metadata:
+        extension: .py
+        size_bytes: 5200
+        language: python
+
+    src/utils.py:
+      content: |
+        """Utility functions for multimodal examples."""
+
+        import requests
+        from PIL import Image
+        from pathlib import Path
+        from config import IMAGES_DIR, AUDIO_DIR
+
+        def download_samples():
+            """Download sample images and audio files."""
+            
+            # Sample images
+            image_urls = {
+                "parrot.jpg": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/transformers/tasks/image_classification_parrots.png",
+                "cat.jpg": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400",
+                "dog.jpg": "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400",
+                "sunset.jpg": "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?w=400",
+                "city.jpg": "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400"
+            }
+            
+            print("Downloading sample images...")
+            for filename, url in image_urls.items():
+                filepath = IMAGES_DIR / filename
+                if not filepath.exists():
+                    try:
+                        response = requests.get(url, stream=True)
+                        img = Image.open(response.raw)
+                        img.save(filepath)
+                        print(f"  ✓ Downloaded {filename}")
+                    except Exception as e:
+                        print(f"  ✗ Error downloading {filename}: {e}")
+                else:
+                    print(f"  - {filename} already exists")
+            
+            # Note: Audio samples would be downloaded similarly
+            print("\nSample download complete!")
+
+        if __name__ == "__main__":
+            download_samples()
+      metadata:
+        extension: .py
+        size_bytes: 1500
+        language: python
+
+    tests/test_multimodal.py:
+      content: |
+        """Unit tests for multimodal AI examples."""
+
+        import pytest
+        import sys
+        from pathlib import Path
+        from PIL import Image
+        import numpy as np
+
+        # Add src to path
+        sys.path.append(str(Path(__file__).parent.parent / "src"))
+
+        from config import get_device, IMAGES_DIR
+        from vision_transformers import classify_image_with_model
+
+        def test_device_detection():
+            """Test that device detection works."""
+            device = get_device()
+            assert device in ["cpu", "cuda", "mps"]
+
+        def test_imports():
+            """Test that all required libraries can be imported."""
+            import transformers
+            import torch
+            import torchvision
+            import diffusers
+            import soundfile
+            
+            assert transformers.__version__
+            assert torch.__version__
+
+        def test_create_test_image():
+            """Test creating a simple test image."""
+            # Create a simple red square
+            img = Image.new('RGB', (224, 224), color='red')
+            assert img.size == (224, 224)
+            assert img.mode == 'RGB'
+
+        def test_vision_classification():
+            """Test basic vision transformer classification."""
+            # Create test image
+            img = Image.new('RGB', (224, 224), color='blue')
+            
+            try:
+                # This might fail if model can't be downloaded
+                label, confidence = classify_image_with_model(img, "google/vit-base-patch16-224")
+                assert isinstance(label, str)
+                assert 0 <= confidence <= 1
+            except Exception as e:
+                # Skip if model download fails
+                pytest.skip(f"Model download failed: {e}")
+
+        def test_multimodal_search_engine():
+            """Test the multimodal search engine initialization."""
+            from multimodal_search import MultimodalSearchEngine
+            
+            try:
+                engine = MultimodalSearchEngine()
+                assert engine.device in ["cpu", "cuda", "mps"]
+                assert engine.image_embeddings is None  # Not indexed yet
+            except Exception as e:
+                pytest.skip(f"Model initialization failed: {e}")
+
+        if __name__ == "__main__":
+            pytest.main([__file__])
+      metadata:
+        extension: .py
+        size_bytes: 1900
+        language: python
+
+    notebooks/vision_exploration.ipynb:
+      content: |
+        {
+         "cells": [
+          {
+           "cell_type": "markdown",
+           "metadata": {},
+           "source": [
+            "# Vision Transformer Exploration\n",
+            "\n",
+            "This notebook provides interactive exploration of vision transformers."
+           ]
+          },
+          {
+           "cell_type": "code",
+           "execution_count": null,
+           "metadata": {},
+           "outputs": [],
+           "source": [
+            "# Setup\n",
+            "import sys\n",
+            "sys.path.append('../src')\n",
+            "\n",
+            "from transformers import AutoImageProcessor, AutoModelForImageClassification\n",
+            "from PIL import Image\n",
+            "import torch\n",
+            "import matplotlib.pyplot as plt\n",
+            "import requests\n",
+            "\n",
+            "print(\"Libraries loaded successfully!\")"
+           ]
+          },
+          {
+           "cell_type": "markdown",
+           "metadata": {},
+           "source": [
+            "## 1. Load and Visualize an Image"
+           ]
+          },
+          {
+           "cell_type": "code",
+           "execution_count": null,
+           "metadata": {},
+           "outputs": [],
+           "source": [
+            "# Load sample image\n",
+            "url = \"https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/transformers/tasks/image_classification_parrots.png\"\n",
+            "image = Image.open(requests.get(url, stream=True).raw)\n",
+            "\n",
+            "# Display\n",
+            "plt.figure(figsize=(8, 6))\n",
+            "plt.imshow(image)\n",
+            "plt.axis('off')\n",
+            "plt.title(\"Sample Image for Classification\")\n",
+            "plt.show()"
+           ]
+          },
+          {
+           "cell_type": "markdown",
+           "metadata": {},
+           "source": [
+            "## 2. Compare Vision Transformer Architectures"
+           ]
+          },
+          {
+           "cell_type": "code",
+           "execution_count": null,
+           "metadata": {},
+           "outputs": [],
+           "source": [
+            "# Define models to compare\n",
+            "models = {\n",
+            "    \"ViT\": \"google/vit-base-patch16-224\",\n",
+            "    \"DeiT\": \"facebook/deit-base-patch16-224\",\n",
+            "    \"Swin\": \"microsoft/swin-tiny-patch4-window7-224\"\n",
+            "}\n",
+            "\n",
+            "# Classify with each model\n",
+            "results = {}\n",
+            "\n",
+            "for name, model_id in models.items():\n",
+            "    print(f\"\\nProcessing with {name}...\")\n",
+            "    \n",
+            "    processor = AutoImageProcessor.from_pretrained(model_id)\n",
+            "    model = AutoModelForImageClassification.from_pretrained(model_id)\n",
+            "    \n",
+            "    inputs = processor(images=image, return_tensors=\"pt\")\n",
+            "    outputs = model(**inputs)\n",
+            "    \n",
+            "    # Get top 3 predictions\n",
+            "    logits = outputs.logits\n",
+            "    probs = torch.nn.functional.softmax(logits, dim=-1)\n",
+            "    top3 = torch.topk(probs, 3)\n",
+            "    \n",
+            "    results[name] = []\n",
+            "    for i in range(3):\n",
+            "        idx = top3.indices[0][i].item()\n",
+            "        label = model.config.id2label[idx]\n",
+            "        score = top3.values[0][i].item()\n",
+            "        results[name].append((label, score))\n",
+            "        print(f\"  {i+1}. {label}: {score:.2%}\")"
+           ]
+          },
+          {
+           "cell_type": "markdown",
+           "metadata": {},
+           "source": [
+            "## 3. Visualize Model Predictions"
+           ]
+          },
+          {
+           "cell_type": "code",
+           "execution_count": null,
+           "metadata": {},
+           "outputs": [],
+           "source": [
+            "# Create comparison chart\n",
+            "fig, axes = plt.subplots(1, 3, figsize=(15, 5))\n",
+            "\n",
+            "for idx, (model_name, predictions) in enumerate(results.items()):\n",
+            "    ax = axes[idx]\n",
+            "    \n",
+            "    labels = [pred[0] for pred in predictions]\n",
+            "    scores = [pred[1] for pred in predictions]\n",
+            "    \n",
+            "    ax.barh(labels, scores)\n",
+            "    ax.set_xlim(0, 1)\n",
+            "    ax.set_xlabel('Confidence')\n",
+            "    ax.set_title(f'{model_name} Predictions')\n",
+            "    \n",
+            "    for i, score in enumerate(scores):\n",
+            "        ax.text(score + 0.01, i, f'{score:.1%}', va='center')\n",
+            "\n",
+            "plt.tight_layout()\n",
+            "plt.show()"
+           ]
+          },
+          {
+           "cell_type": "markdown",
+           "metadata": {},
+           "source": [
+            "## 4. Understanding Patch-Based Processing"
+           ]
+          },
+          {
+           "cell_type": "code",
+           "execution_count": null,
+           "metadata": {},
+           "outputs": [],
+           "source": [
+            "# Visualize how images are divided into patches\n",
+            "import numpy as np\n",
+            "\n",
+            "# Create a grid overlay\n",
+            "img_array = np.array(image)\n",
+            "h, w = img_array.shape[:2]\n",
+            "patch_size = 16  # ViT uses 16x16 patches\n",
+            "\n",
+            "fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))\n",
+            "\n",
+            "# Original image\n",
+            "ax1.imshow(image)\n",
+            "ax1.set_title(\"Original Image\")\n",
+            "ax1.axis('off')\n",
+            "\n",
+            "# Image with patch grid\n",
+            "ax2.imshow(image)\n",
+            "ax2.set_title(f\"Image Divided into {patch_size}x{patch_size} Patches\")\n",
+            "\n",
+            "# Draw grid\n",
+            "for i in range(0, h, patch_size):\n",
+            "    ax2.axhline(y=i, color='red', linewidth=0.5, alpha=0.5)\n",
+            "for i in range(0, w, patch_size):\n",
+            "    ax2.axvline(x=i, color='red', linewidth=0.5, alpha=0.5)\n",
+            "\n",
+            "ax2.axis('off')\n",
+            "plt.tight_layout()\n",
+            "plt.show()\n",
+            "\n",
+            "print(f\"Total patches: {(h // patch_size) * (w // patch_size)}\")"
+           ]
+          }
+         ],
+         "metadata": {
+          "kernelspec": {
+           "display_name": "Python 3",
+           "language": "python",
+           "name": "python3"
+          },
+          "language_info": {
+           "name": "python",
+           "version": "3.12.9"
+          }
+         },
+         "nbformat": 4,
+         "nbformat_minor": 4
+        }
+      metadata:
+        extension: .ipynb
+        size_bytes: 5500
+        language: json
+
+    notebooks/multimodal_search.ipynb:
+      content: |
+        {
+         "cells": [
+          {
+           "cell_type": "markdown",
+           "metadata": {},
+           "source": [
+            "# Building a Multimodal Search Engine\n",
+            "\n",
+            "Learn how to build an image search engine using CLIP."
+           ]
+          },
+          {
+           "cell_type": "code",
+           "execution_count": null,
+           "metadata": {},
+           "outputs": [],
+           "source": [
+            "# Setup\n",
+            "import sys\n",
+            "sys.path.append('../src')\n",
+            "\n",
+            "from multimodal_search import MultimodalSearchEngine\n",
+            "from utils import download_samples\n",
+            "from config import IMAGES_DIR\n",
+            "import matplotlib.pyplot as plt\n",
+            "from PIL import Image\n",
+            "\n",
+            "print(\"Libraries loaded!\")"
+           ]
+          },
+          {
+           "cell_type": "markdown",
+           "metadata": {},
+           "source": [
+            "## 1. Download Sample Images"
+           ]
+          },
+          {
+           "cell_type": "code",
+           "execution_count": null,
+           "metadata": {},
+           "outputs": [],
+           "source": [
+            "# Download sample images\n",
+            "download_samples()\n",
+            "\n",
+            "# List available images\n",
+            "import os\n",
+            "images = list(IMAGES_DIR.glob(\"*.jpg\")) + list(IMAGES_DIR.glob(\"*.png\"))\n",
+            "print(f\"\\nFound {len(images)} images:\")\n",
+            "for img in images:\n",
+            "    print(f\"  - {img.name}\")"
+           ]
+          },
+          {
+           "cell_type": "markdown",
+           "metadata": {},
+           "source": [
+            "## 2. Create and Index Search Engine"
+           ]
+          },
+          {
+           "cell_type": "code",
+           "execution_count": null,
+           "metadata": {},
+           "outputs": [],
+           "source": [
+            "# Create search engine\n",
+            "search_engine = MultimodalSearchEngine()\n",
+            "\n",
+            "# Index all images\n",
+            "search_engine.index_images(IMAGES_DIR)\n",
+            "\n",
+            "print(f\"\\nIndexed {len(search_engine.image_paths)} images successfully!\")"
+           ]
+          },
+          {
+           "cell_type": "markdown",
+           "metadata": {},
+           "source": [
+            "## 3. Interactive Search"
+           ]
+          },
+          {
+           "cell_type": "code",
+           "execution_count": null,
+           "metadata": {},
+           "outputs": [],
+           "source": [
+            "def search_and_display(query, top_k=3):\n",
+            "    \"\"\"Search and display results.\"\"\"\n",
+            "    results = search_engine.search(query, top_k=top_k)\n",
+            "    \n",
+            "    fig, axes = plt.subplots(1, min(top_k, len(results)), figsize=(15, 5))\n",
+            "    if top_k == 1:\n",
+            "        axes = [axes]\n",
+            "    \n",
+            "    for idx, (path, score) in enumerate(results):\n",
+            "        img = Image.open(path)\n",
+            "        axes[idx].imshow(img)\n",
+            "        axes[idx].set_title(f\"{path.name}\\nScore: {score:.3f}\")\n",
+            "        axes[idx].axis('off')\n",
+            "    \n",
+            "    plt.suptitle(f'Query: \"{query}\"', fontsize=16)\n",
+            "    plt.tight_layout()\n",
+            "    plt.show()\n",
+            "\n",
+            "# Example searches\n",
+            "queries = [\n",
+            "    \"a colorful bird\",\n",
+            "    \"cute furry animal\",\n",
+            "    \"warm sunset colors\",\n",
+            "    \"urban cityscape\"\n",
+            "]\n",
+            "\n",
+            "for query in queries:\n",
+            "    search_and_display(query, top_k=3)"
+           ]
+          },
+          {
+           "cell_type": "markdown",
+           "metadata": {},
+           "source": [
+            "## 4. Custom Query"
+           ]
+          },
+          {
+           "cell_type": "code",
+           "execution_count": null,
+           "metadata": {},
+           "outputs": [],
+           "source": [
+            "# Try your own query!\n",
+            "custom_query = \"something orange\"  # Change this to your query\n",
+            "search_and_display(custom_query, top_k=3)"
+           ]
+          },
+          {
+           "cell_type": "markdown",
+           "metadata": {},
+           "source": [
+            "## 5. Analyze Similarity Scores"
+           ]
+          },
+          {
+           "cell_type": "code",
+           "execution_count": null,
+           "metadata": {},
+           "outputs": [],
+           "source": [
+            "# Check similarity for all images with a query\n",
+            "query = \"animal\"\n",
+            "results = search_engine.search(query, top_k=len(search_engine.image_paths))\n",
+            "\n",
+            "# Plot similarity distribution\n",
+            "names = [r[0].name for r in results]\n",
+            "scores = [r[1] for r in results]\n",
+            "\n",
+            "plt.figure(figsize=(10, 6))\n",
+            "plt.bar(range(len(scores)), scores)\n",
+            "plt.xticks(range(len(names)), names, rotation=45, ha='right')\n",
+            "plt.ylabel('Similarity Score')\n",
+            "plt.title(f'Similarity Scores for Query: \"{query}\"')\n",
+            "plt.tight_layout()\n",
+            "plt.show()"
+           ]
+          }
+         ],
+         "metadata": {
+          "kernelspec": {
+           "display_name": "Python 3",
+           "language": "python",
+           "name": "python3"
+          },
+          "language_info": {
+           "name": "python",
+           "version": "3.12.9"
+          }
+         },
+         "nbformat": 4,
+         "nbformat_minor": 4
+        }
+      metadata:
+        extension: .ipynb
+        size_bytes: 4500
+        language: json

@@ -1,0 +1,91 @@
+version: '3'
+
+vars:
+  PYTHON_VERSION: 3.12.9
+
+tasks:
+  default:
+    desc: "Show available tasks"
+    cmds:
+      - task --list
+
+  setup:
+    desc: "Set up the Python environment and install dependencies"
+    cmds:
+      - pyenv install -s {{.PYTHON_VERSION}}
+      - pyenv local {{.PYTHON_VERSION}}
+      - poetry install
+      - poetry config virtualenvs.in-project true
+      - mkdir -p data/images data/audio outputs
+      - 'echo "Setup complete! Activate with: source .venv/bin/activate"'
+
+  download-samples:
+    desc: "Download sample images and audio files"
+    cmds:
+      - poetry run python -c "from src.utils import download_samples; download_samples()"
+
+  run:
+    desc: "Run all examples"
+    cmds:
+      - poetry run python src/main.py
+
+  run-vision:
+    desc: "Run vision transformer examples"
+    cmds:
+      - poetry run python src/vision_transformers.py
+
+  run-audio:
+    desc: "Run audio processing examples"
+    cmds:
+      - poetry run python src/audio_processing.py
+
+  run-diffusion:
+    desc: "Run diffusion model examples"
+    cmds:
+      - poetry run python src/diffusion_models.py
+
+  run-multimodal:
+    desc: "Run multimodal model examples"
+    cmds:
+      - poetry run python src/multimodal_models.py
+
+  run-search:
+    desc: "Run multimodal search engine"
+    cmds:
+      - poetry run python src/multimodal_search.py
+
+  run-sglang:
+    desc: "Run SGLang deployment example"
+    cmds:
+      - poetry run python src/sglang_deployment.py
+
+  gradio:
+    desc: "Launch Gradio web interface"
+    cmds:
+      - poetry run python src/gradio_app.py
+
+  notebook:
+    desc: "Launch Jupyter notebook server"
+    cmds:
+      - poetry run jupyter notebook notebooks/
+
+  test:
+    desc: "Run all tests"
+    cmds:
+      - poetry run pytest tests/ -v
+
+  format:
+    desc: "Format code with Black and Ruff"
+    cmds:
+      - poetry run black src/ tests/
+      - poetry run ruff check --fix src/ tests/
+
+  clean:
+    desc: "Clean up generated files"
+    cmds:
+      - find . -type d -name "__pycache__" -exec rm -rf {} +
+      - find . -type f -name "*.pyc" -delete
+      - rm -rf .pytest_cache
+      - rm -rf .ruff_cache
+      - rm -rf .mypy_cache
+      - rm -rf outputs/*
