@@ -1,25 +1,24 @@
 """Complete SGLang multimodal pipeline example from the article."""
 
-from config import get_device
 import json
-from pathlib import Path
 
 # Note: This is a demonstration of the SGLang concepts from the article.
 # For actual SGLang usage, install: pip install "sglang[all]>=0.2.0"
+
 
 def demonstrate_sglang_pipeline():
     """
     Demonstrate the complete multimodal customer support pipeline from the article.
     """
-    
+
     print("SGLang Multimodal Pipeline: Customer Support Automation")
     print("=" * 70)
-    
+
     print("\nThis example shows how to build a production multimodal pipeline")
     print("that processes screenshots and voice messages for support tickets.\n")
-    
+
     # Show the conceptual pipeline code from the article
-    pipeline_code = '''
+    pipeline_code = """
 import sglang as sgl
 
 # Define model functions with quantization enabled
@@ -71,93 +70,95 @@ sgl.set_default_backend(runtime)
 # Example usage
 # result = support_pipeline.run(image=user_image, audio=user_audio)
 # print(result["summary"])
-'''
-    
+"""
+
     print("Pipeline Code:")
     print("-" * 70)
     print(pipeline_code)
     print("-" * 70)
-    
+
     # Simulate pipeline execution
     print("\n\nSimulated Pipeline Execution:")
     print("=" * 70)
-    
+
     # Simulated inputs
     print("\n1. Input Processing:")
     print("   • Screenshot: error_screenshot.png (showing login error)")
     print("   • Audio: customer_message.wav (reporting access issues)")
-    
+
     # Simulated processing steps
     print("\n2. Pipeline Steps:")
     print("   a) Image Classification Node:")
     print("      - Input: Screenshot of error dialog")
     print("      - Processing: Vision transformer analyzes image")
     print("      - Output: Classification = 'error'")
-    
+
     print("\n   b) Audio Transcription Node:")
     print("      - Input: Customer voice message")
     print("      - Processing: Whisper model transcribes audio")
     print("      - Output: 'Customer reporting login issues with error code 403'")
-    
+
     print("\n   c) Summary Generation Node:")
     print("      - Inputs: Image class + Audio transcript")
     print("      - Processing: LLM generates unified summary")
     print("      - Output: Support ticket summary")
-    
+
     # Simulated output
     print("\n3. Final Output:")
     print("-" * 70)
     support_summary = {
         "ticket_type": "error",
-        "summary": "Customer experiencing login authentication failure (Error 403). Screenshot shows error dialog when attempting to access account. Issue appears to be related to authentication permissions.",
+        "summary": "Customer experiencing login authentication failure (Error 403). "
+        "Screenshot shows error dialog when attempting to access account. "
+        "Issue appears to be related to authentication permissions.",
         "priority": "high",
         "suggested_actions": [
             "Check user account permissions",
             "Verify authentication service status",
-            "Review recent security policy changes"
-        ]
+            "Review recent security policy changes",
+        ],
     }
-    
+
     print(json.dumps(support_summary, indent=2))
-    
+
     # Advanced features
     print("\n\n4. SGLang Advanced Features:")
     print("-" * 70)
-    
+
     features = {
         "Quantization": {
             "description": "Reduce model memory usage by 4x",
             "options": ["AWQ", "GPTQ", "INT8", "FP8"],
-            "benefit": "Run larger models on smaller GPUs"
+            "benefit": "Run larger models on smaller GPUs",
         },
         "Speculative Decoding": {
             "description": "Use draft model for faster generation",
             "speedup": "2-3x faster inference",
-            "benefit": "Lower latency for real-time applications"
+            "benefit": "Lower latency for real-time applications",
         },
         "RadixAttention": {
             "description": "Efficient KV cache sharing",
-            "benefit": "Higher throughput for batch processing"
+            "benefit": "Higher throughput for batch processing",
         },
         "Multi-LoRA": {
             "description": "Serve multiple LoRA adapters",
-            "benefit": "A/B testing and personalization"
+            "benefit": "A/B testing and personalization",
         },
         "Streaming": {
             "description": "Progressive token generation",
-            "benefit": "Better user experience"
-        }
+            "benefit": "Better user experience",
+        },
     }
-    
+
     for feature, details in features.items():
         print(f"\n{feature}:")
         for key, value in details.items():
             print(f"  • {key.title()}: {value}")
-    
+
     # Deployment options
     print("\n\n5. Deployment Options:")
     print("-" * 70)
-    
+
     deployment_commands = """
 # Local development
 python -m sglang.launch_server \\
@@ -175,13 +176,14 @@ docker run -p 8080:8080 \\
 # Kubernetes deployment
 kubectl apply -f sglang-deployment.yaml
 """
-    
+
     print(deployment_commands)
-    
+
     # Production architecture
     print("\n6. Production Architecture:")
     print("-" * 70)
-    print("""
+    print(
+        """
     Load Balancer
          |
     +---------+
@@ -197,11 +199,12 @@ kubectl apply -f sglang-deployment.yaml
     +----+----+------+
          |
     Storage Layer
-    """)
-    
+    """
+    )
+
     print("\n7. Integration Example:")
     print("-" * 70)
-    
+
     integration_code = '''
 # Client code to call SGLang pipeline
 import requests
@@ -229,9 +232,9 @@ result = process_support_ticket(
 )
 print(result['summary'])
 '''
-    
+
     print(integration_code)
-    
+
     print("\n\nKey Takeaways:")
     print("-" * 70)
     print("✓ SGLang enables complex multimodal pipelines with simple decorators")
@@ -239,8 +242,9 @@ print(result['summary'])
     print("✓ Supports text, vision, audio, and custom functions in one graph")
     print("✓ Scales from local development to cloud deployment")
     print("✓ Integrates with existing infrastructure via REST APIs")
-    
+
     print("\n\nLearn more: https://github.com/sgl-project/sglang")
+
 
 if __name__ == "__main__":
     demonstrate_sglang_pipeline()

@@ -1,16 +1,14 @@
 """All code examples from Article 7 in one file for reference."""
 
-from transformers import (
-    AutoImageProcessor, AutoModelForImageClassification,
-    AutoProcessor, AutoModel, WhisperForConditionalGeneration,
-    pipeline, BlipProcessor, BlipForConditionalGeneration
-)
-from diffusers import StableDiffusionXLPipeline
-from PIL import Image
-import torch
 import requests
-import soundfile as sf
-import os
+import torch
+from PIL import Image
+from transformers import (
+    AutoImageProcessor,
+    AutoModel,
+    AutoModelForImageClassification,
+    AutoProcessor,
+)
 
 # Environment setup examples from article
 """
@@ -33,16 +31,19 @@ source venv/bin/activate
 pip install "transformers>=4.40.0,<5.0.0" torch torchvision torchaudio
 """
 
+
 def example_1_basic_vit_classification():
     """Example from 'Classifying an Image with a Vision Transformer (ViT)'"""
-    
+
     # Download an example image (parrots)
     url = "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/transformers/tasks/image_classification_parrots.png"
     image = Image.open(requests.get(url, stream=True).raw)
 
     # Load the processor and model
-    processor = AutoImageProcessor.from_pretrained('google/vit-base-patch16-224')
-    model = AutoModelForImageClassification.from_pretrained('google/vit-base-patch16-224')
+    processor = AutoImageProcessor.from_pretrained("google/vit-base-patch16-224")
+    model = AutoModelForImageClassification.from_pretrained(
+        "google/vit-base-patch16-224"
+    )
 
     # Preprocess the image and make a prediction
     inputs = processor(images=image, return_tensors="pt")
@@ -52,15 +53,17 @@ def example_1_basic_vit_classification():
     predicted_class = outputs.logits.argmax(-1).item()
     print("Predicted class:", model.config.id2label[predicted_class])
 
+
 def example_2_modern_vision_transformers():
     """Example from 'Classifying Images with Modern Vision Transformers'"""
-    
+
     # 1. Load an image
     url = "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/transformers/tasks/image_classification_parrots.png"
     image = Image.open(requests.get(url, stream=True).raw)
 
     # 2. Choose a modern vision transformer (e.g., DeiT, Swin, MaxViT)
-    # Examples: 'facebook/deit-base-patch16-224', 'microsoft/swin-tiny-patch4-window7-224'
+    # Examples: 'facebook/deit-base-patch16-224',
+    # 'microsoft/swin-tiny-patch4-window7-224'
     model_id = "facebook/deit-base-patch16-224"
     processor = AutoImageProcessor.from_pretrained(model_id)
     model = AutoModelForImageClassification.from_pretrained(model_id)
@@ -75,22 +78,22 @@ def example_2_modern_vision_transformers():
     # 5. Decode to label
     print("Predicted class:", model.config.id2label[predicted_class])
 
+
 def example_3_whisper_pipeline():
     """Example from 'Transcribing Audio with Whisper and Hugging Face Pipeline'"""
-    
-    # Create an automatic speech recognition pipeline with Whisper
-    asr = pipeline("automatic-speech-recognition", model="openai/whisper-base")
 
-    # Transcribe your audio file (WAV, MP3, FLAC, etc.)
+    # Create an automatic speech recognition pipeline with Whisper
+    # asr = pipeline("automatic-speech-recognition", model="openai/whisper-base")
     # result = asr("sample.wav")
     # print("Transcription:", result["text"])
-    
+
     # Demo output
     print("Transcription: [Would transcribe audio file here]")
 
+
 def example_4_whisper_manual():
     """Example from 'Transcribing Audio with AutoProcessor and Whisper'"""
-    
+
     # This is a conceptual example - requires actual audio file
     """
     # Load audio file
@@ -113,21 +116,23 @@ def example_4_whisper_manual():
     """
     print("Manual transcription example (requires audio file)")
 
+
 def example_5_audio_classification():
     """Example from 'Classifying Audio Events with Hugging Face Pipeline'"""
-    
-    # Create an audio classification pipeline
-    classifier = pipeline("audio-classification", model="superb/wav2vec2-base-superb-ks")
 
-    # Classify your audio file
+    # Create an audio classification pipeline
+    # classifier = pipeline(
+    #     "audio-classification", model="superb/wav2vec2-base-superb-ks"
+    # )
     # result = classifier("dog_bark.wav")
     # print("Predicted label:", result[0]["label"])
-    
+
     print("Audio classification example (requires audio file)")
+
 
 def example_6_stable_diffusion():
     """Example from 'Generating Art with Stable Diffusion XL'"""
-    
+
     # Note: This is resource intensive
     """
     # Load the SDXL pipeline from the Hugging Face Hub
@@ -155,9 +160,10 @@ def example_6_stable_diffusion():
     """
     print("Stable Diffusion example (requires GPU and significant memory)")
 
+
 def example_7_clip_similarity():
     """Example from 'Searching Images by Text with CLIP (Modern API)'"""
-    
+
     # Load model and processor using the recommended Auto* interfaces
     model_id = "openai/clip-vit-base-patch16"
     model = AutoModel.from_pretrained(model_id)
@@ -166,9 +172,9 @@ def example_7_clip_similarity():
     # Prepare images and texts (demo with dummy data)
     # images = [Image.open("cat.jpg"), Image.open("dog.jpg")]
     texts = ["a photo of a cat", "a photo of a dog"]
-    
+
     # For demo, create dummy image
-    dummy_image = Image.new('RGB', (224, 224), color='red')
+    dummy_image = Image.new("RGB", (224, 224), color="red")
     images = [dummy_image, dummy_image]
 
     # Preprocess inputs
@@ -182,9 +188,10 @@ def example_7_clip_similarity():
 
     print("Probabilities:", probs)
 
+
 def example_8_multimodal_search_step1():
     """Example from 'Step 1: Embed a Collection of Images (Modern API)'"""
-    
+
     # Load model and processor
     model_id = "openai/clip-vit-base-patch16"
     model = AutoModel.from_pretrained(model_id)
@@ -192,12 +199,13 @@ def example_8_multimodal_search_step1():
     model.eval()
 
     # Demo with dummy data
-    image_folder = "./images"
-    # image_files = [os.path.join(image_folder, fname) for fname in os.listdir(image_folder)]
-    
+    # image_folder = "./images"
+    # image_files = [os.path.join(image_folder, fname)
+    #               for fname in os.listdir(image_folder)]
+
     # For demo, create dummy images
-    images = [Image.new('RGB', (224, 224), color='blue') for _ in range(3)]
-    
+    images = [Image.new("RGB", (224, 224), color="blue") for _ in range(3)]
+
     # Preprocess images
     inputs = processor(images=images, return_tensors="pt", padding=True)
 
@@ -205,17 +213,18 @@ def example_8_multimodal_search_step1():
     with torch.no_grad():
         image_features = model.get_image_features(**inputs)
         image_features /= image_features.norm(dim=-1, keepdim=True)
-    
+
     print("Image embeddings shape:", image_features.shape)
+
 
 def example_9_multimodal_search_step2():
     """Example from 'Step 2: Query with Text and Retrieve'"""
-    
+
     # Continuing from step 1...
     model_id = "openai/clip-vit-base-patch16"
     model = AutoModel.from_pretrained(model_id)
     processor = AutoProcessor.from_pretrained(model_id)
-    
+
     # User provides a text query
     text_query = "a smiling person wearing sunglasses on the beach"
 
@@ -226,70 +235,74 @@ def example_9_multimodal_search_step2():
         text_features /= text_features.norm(dim=-1, keepdim=True)
 
     print("Text embedding shape:", text_features.shape)
-    
+
     # In practice, you would compute similarities with image_features
     # similarities = (image_features @ text_features.T).squeeze(1)
     # best_idx = similarities.argmax().item()
 
+
 def example_10_sglang_pipeline():
     """Example from 'Defining a Multimodal Serving Pipeline in SGLang'"""
-    
+
     # This is the conceptual SGLang code from the article
-    sglang_code = '''
-import sglang as sgl
+    # sglang_code = """
+    # import sglang as sgl
+    #
+    # @sgl.function
+    # def classify_image(s, image):
+    #     s += sgl.image(image)
+    #     s += "What type of customer support issue is shown in this image? "
+    #     s += "Classify as: error, feature_request, or other.\\n"
+    #     s += "Classification: " + sgl.gen("classification", max_tokens=10)
+    #
+    # @sgl.function
+    # def transcribe_audio(s, audio):
+    #     s += "Transcribed audio: Customer reporting login issues with error code 403"
+    #
+    # @sgl.function
+    # def summarize_support_request(s, image_class, audio_text):
+    #     s += f"Image classification: {image_class}\\n"
+    #     s += f"Audio transcription: {audio_text}\\n"
+    #     s += "Please provide a brief summary of this support request:\\n"
+    #     s += sgl.gen("summary", max_tokens=100)
+    #
+    # @sgl.function
+    # def support_pipeline(s, image, audio):
+    #     s_img = classify_image.run(image=image)
+    #     image_class = s_img["classification"]
+    #
+    #     s_audio = transcribe_audio.run(audio=audio)
+    #     audio_text = "Customer reporting login issues with error code 403"
+    #
+    #     s = summarize_support_request(s, image_class, audio_text)
+    #     return s
+    #
+    # # Runtime configuration with quantization
+    # runtime = sgl.Runtime(
+    #     model_path="meta-llama/Llama-2-7b-chat-hf",
+    #     quantization="awq",
+    #     tp_size=1
+    # )
+    #
+    # sgl.set_default_backend(runtime)
+    # """
 
-@sgl.function
-def classify_image(s, image):
-    s += sgl.image(image)
-    s += "What type of customer support issue is shown in this image? "
-    s += "Classify as: error, feature_request, or other.\\n"
-    s += "Classification: " + sgl.gen("classification", max_tokens=10)
-
-@sgl.function
-def transcribe_audio(s, audio):
-    s += "Transcribed audio: Customer reporting login issues with error code 403"
-
-@sgl.function
-def summarize_support_request(s, image_class, audio_text):
-    s += f"Image classification: {image_class}\\n"
-    s += f"Audio transcription: {audio_text}\\n"
-    s += "Please provide a brief summary of this support request:\\n"
-    s += sgl.gen("summary", max_tokens=100)
-
-@sgl.function
-def support_pipeline(s, image, audio):
-    s_img = classify_image.run(image=image)
-    image_class = s_img["classification"]
-    
-    s_audio = transcribe_audio.run(audio=audio)
-    audio_text = "Customer reporting login issues with error code 403"
-    
-    s = summarize_support_request(s, image_class, audio_text)
-    return s
-
-# Runtime configuration with quantization
-runtime = sgl.Runtime(
-    model_path="meta-llama/Llama-2-7b-chat-hf",
-    quantization="awq",
-    tp_size=1
-)
-
-sgl.set_default_backend(runtime)
-'''
-    
     print("SGLang pipeline example (requires SGLang installation)")
     print("Code structure shown above demonstrates the pattern")
 
+
 def example_11_summary_vit_with_auto():
     """Example from Summary: 'Classifying an Image with Vision Transformer'"""
-    
+
     # 1. Load an image from the web
     url = "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/transformers/tasks/image_classification_parrots.png"
     image = Image.open(requests.get(url, stream=True).raw)
 
     # 2. Load pre-trained ViT model and processor using Auto classes
-    processor = AutoProcessor.from_pretrained('google/vit-base-patch16-224')
-    model = AutoModelForImageClassification.from_pretrained('google/vit-base-patch16-224')
+    processor = AutoProcessor.from_pretrained("google/vit-base-patch16-224")
+    model = AutoModelForImageClassification.from_pretrained(
+        "google/vit-base-patch16-224"
+    )
 
     # 3. Preprocess the image and predict the class
     inputs = processor(images=image, return_tensors="pt")
@@ -297,9 +310,10 @@ def example_11_summary_vit_with_auto():
     predicted_class = outputs.logits.argmax(-1).item()
     print("Predicted class:", model.config.id2label[predicted_class])
 
+
 def example_12_summary_clip_search():
     """Example from Summary: 'Text-to-Image Search with CLIP'"""
-    
+
     # 1. Load CLIP model and processor using Auto classes
     model = AutoModel.from_pretrained("openai/clip-vit-base-patch16")
     processor = AutoProcessor.from_pretrained("openai/clip-vit-base-patch16")
@@ -307,9 +321,9 @@ def example_12_summary_clip_search():
     # 2. Prepare images and text queries
     # images = [Image.open("cat.jpg"), Image.open("dog.jpg")]
     texts = ["a photo of a cat", "a photo of a dog"]
-    
+
     # Demo with dummy images
-    images = [Image.new('RGB', (224, 224), color=c) for c in ['red', 'blue']]
+    images = [Image.new("RGB", (224, 224), color=c) for c in ["red", "blue"]]
 
     # 3. Compute similarity between images and text
     inputs = processor(text=texts, images=images, return_tensors="pt", padding=True)
@@ -318,51 +332,53 @@ def example_12_summary_clip_search():
     probs = logits_per_image.softmax(dim=1)
     print("Probabilities:", probs)
 
+
 def main():
     """Run all examples (those that don't require external resources)."""
-    
+
     print("Article 7: All Code Examples")
     print("=" * 70)
-    
+
     print("\n1. Basic ViT Classification")
     example_1_basic_vit_classification()
-    
+
     print("\n2. Modern Vision Transformers (DeiT)")
     example_2_modern_vision_transformers()
-    
+
     print("\n3. Whisper Pipeline")
     example_3_whisper_pipeline()
-    
+
     print("\n4. Whisper Manual")
     example_4_whisper_manual()
-    
+
     print("\n5. Audio Classification")
     example_5_audio_classification()
-    
+
     print("\n6. Stable Diffusion")
     example_6_stable_diffusion()
-    
+
     print("\n7. CLIP Similarity")
     example_7_clip_similarity()
-    
+
     print("\n8. Multimodal Search - Embedding")
     example_8_multimodal_search_step1()
-    
+
     print("\n9. Multimodal Search - Query")
     example_9_multimodal_search_step2()
-    
+
     print("\n10. SGLang Pipeline")
     example_10_sglang_pipeline()
-    
+
     print("\n11. Summary ViT Example")
     example_11_summary_vit_with_auto()
-    
+
     print("\n12. Summary CLIP Search")
     example_12_summary_clip_search()
-    
+
     print("\n" + "=" * 70)
     print("Note: Some examples require audio files, images, or GPU resources")
     print("See individual module files for complete implementations")
+
 
 if __name__ == "__main__":
     main()

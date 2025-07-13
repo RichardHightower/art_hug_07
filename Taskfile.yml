@@ -22,7 +22,7 @@ tasks:
   download-samples:
     desc: "Download sample images and audio files"
     cmds:
-      - poetry run python -c "from src.utils import download_samples; download_samples()"
+      - poetry run python -c "import sys; sys.path.append('src'); from utils import download_samples; download_samples()"
 
   run:
     desc: "Run all examples"

@@ -2,6 +2,7 @@
 
 import os
 from pathlib import Path
+
 import torch
 from dotenv import load_dotenv
 
@@ -22,7 +23,9 @@ for dir_path in [DATA_DIR, IMAGES_DIR, AUDIO_DIR, OUTPUT_DIR]:
 # Model configurations
 VISION_MODEL = os.getenv("VISION_MODEL", "google/vit-base-patch16-224")
 AUDIO_MODEL = os.getenv("AUDIO_MODEL", "openai/whisper-base")
-DIFFUSION_MODEL = os.getenv("DIFFUSION_MODEL", "stabilityai/stable-diffusion-xl-base-1.0")
+DIFFUSION_MODEL = os.getenv(
+    "DIFFUSION_MODEL", "stabilityai/stable-diffusion-xl-base-1.0"
+)
 MULTIMODAL_MODEL = os.getenv("MULTIMODAL_MODEL", "openai/clip-vit-base-patch16")
 
 # Performance settings
@@ -36,6 +39,7 @@ HF_TOKEN = os.getenv("HUGGINGFACE_TOKEN")
 # Cache directory
 CACHE_DIR = Path(os.getenv("CACHE_DIR", "~/.cache/huggingface")).expanduser()
 
+
 def get_device():
     """Get the best available device."""
     if FORCE_CPU:
@@ -47,8 +51,13 @@ def get_device():
     else:
         return "cpu"
 
+
 DEVICE = get_device()
 
 # Sample URLs for downloading test data
-SAMPLE_IMAGE_URL = "https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=400"  # Parrot image
-SAMPLE_AUDIO_URL = "https://huggingface.co/datasets/Narsil/asr_dummy/resolve/main/1.flac"
+SAMPLE_IMAGE_URL = (
+    "https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=400"  # Parrot image
+)
+SAMPLE_AUDIO_URL = (
+    "https://huggingface.co/datasets/Narsil/asr_dummy/resolve/main/1.flac"
+)
